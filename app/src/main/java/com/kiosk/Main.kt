@@ -14,19 +14,59 @@ import com.kiosk.menu.toast.MozzarellaSweetPotato
 fun main() {
     val menu = getAllMenuList()
     val cart = ArrayList<Menu>()
+    val account = Account()
+    account.deposit((15000..25000).random().toLong())
 
     while (true) {
         println("\"ISAAC TOAST 에 오신걸 환영합니다.\"")
         println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.")
-        while (true) {
+        var isHome = false
+        while (!isHome) {
+            // 상위 메뉴 표시
             println("[ ISAAC MENU ]")
             for (i in menu.indices) {
                 print("${i + 1}. ")
                 menu[i].displayInfo()
             }
+            var menuSize = menu.size
+            var orderSelect: Int = 0
+            var cancleSelect: Int = 0
+            // 장바구니에 담겨 있는 경우
+            if (cart.size > 0) {
+                orderSelect = menuSize + 1
+                cancleSelect = menuSize + 2
+                menuSize += 2
+                println("\n[ ORDER MENU ]")
+                println(String.format("${orderSelect}. %-8s | %-12s", "ORDER", "장바구니를 확인 후 주문합니다."))
+                println(String.format("${cancleSelect}. %-8s | %-12s", "CANCEL", "진행 중인 주문을 취소합니다."))
+            }
             // 상위 메뉴 선택
-            val select = numberInRange(1, menu.size)
+            val select = numberInRange(1, menuSize)
             while (true) {
+                // 주문
+                if (select == orderSelect) {
+                    var totalPrice: Int = 0
+                    println("아래와 같이 주문하시겠습니까?\n")
+                    println("[ ORDER ]")
+                    for (item in cart) {
+//                        totalPrice += item.price
+                        item.displayInfo()
+                        println()
+                    }
+                    println("\n[ Total ]")
+                    println("W ${totalPrice.toDouble() / 1000}\n")
+                    println("1. 주문       2. 메뉴판")
+                    val select = numberInRange(1, 2)
+                    if (select == 1) {
+                        isHome = true
+                    }
+                    break
+                }
+                // 주문 취소
+                else if (select == cancleSelect) {
+                    break
+                }
+                // 하위 메뉴 표시
                 println("[ ${menu[select - 1].name} MENU ]")
                 val menuList = menu[select - 1].list
                 for (i in menuList.indices) {
@@ -50,7 +90,7 @@ fun main() {
                 val cartSelect = numberInRange(1, 2)
                 if (cartSelect == 1) {
                     cart.add(selectedMenu)
-                    println("${selectedMenu.name} 장바구니에 추가되었습니다.")
+                    println("${selectedMenu.name} 장바구니에 추가되었습니다.\n")
                     break
                 }
             }
