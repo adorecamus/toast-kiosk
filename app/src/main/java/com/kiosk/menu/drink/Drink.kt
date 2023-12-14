@@ -10,6 +10,6 @@ open class Drink(name: String, price: Int, description: String) : Menu(name, des
     }
 
     override fun displayInfo() {
-        println(String.format("%-25s | W %.1f | %s", name, price.toDouble() / 1000, description))
+        print(String.format("%-25s | W %.1f | %s", name, price.toDouble() / 1000, description))
     }
 }
