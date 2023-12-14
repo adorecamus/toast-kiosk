@@ -19,6 +19,7 @@ fun main() {
     val cart = ArrayList<Item>()
     val account = Account()
     account.deposit((15000..25000).random().toLong())
+    println(account.getBalance())
 
     while (true) {
         println("\"ISAAC TOAST 에 오신걸 환영합니다.\"")
@@ -50,7 +51,7 @@ fun main() {
                 if (selectedMenuNumber == orderMenu) {
                     var totalPrice: Int = 0
                     println("아래와 같이 주문하시겠습니까?\n")
-                    println("[ ORDER ]")
+                    println("[ ORDERS ]")
                     for (item in cart) {
                         totalPrice += item.price
                         item.displayInfo()
@@ -59,8 +60,14 @@ fun main() {
                     println("\n[ Total ]")
                     println("W ${totalPrice.toDouble() / 1000}\n")
                     println("1. 주문       2. 메뉴판")
-                    val select = numberInRange(1, 2)
-                    if (select == 1) {
+                    val selectedNumber = numberInRange(1, 2)
+                    if (selectedNumber == 1) {
+                        if (!account.withdraw((totalPrice).toLong())) {
+                            val balance = account.getBalance()
+                            println("현재 잔액은 ${balance}원으로 ${totalPrice - balance}원이 부족해 주문할 수 없습니다.\n")
+                        } else {
+                            println("결제를 완료했습니다.")
+                        }
                         isHome = true
                     }
                     break

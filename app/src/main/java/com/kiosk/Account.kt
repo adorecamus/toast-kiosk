@@ -15,4 +15,8 @@ class Account {
         }
         return false
     }
+
+    fun getBalance(): Long {
+        return balance
+    }
 }
