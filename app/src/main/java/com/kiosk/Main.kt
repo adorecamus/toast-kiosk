@@ -12,6 +12,68 @@ import com.kiosk.menu.toast.CornCheese
 import com.kiosk.menu.toast.MozzarellaSweetPotato
 
 fun main() {
+    val menu = getAllMenuList()
+    val cart = ArrayList<Menu>()
+
+    while (true) {
+        println("\"ISAAC TOAST 에 오신걸 환영합니다.\"")
+        println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.")
+        while (true) {
+            println("[ ISAAC MENU ]")
+            for (i in menu.indices) {
+                print("${i + 1}. ")
+                menu[i].displayInfo()
+            }
+            // 상위 메뉴 선택
+            val select = numberInRange(1, menu.size)
+            while (true) {
+                println("[ ${menu[select - 1].name} MENU ]")
+                val menuList = menu[select - 1].list
+                for (i in menuList.indices) {
+                    print("${i + 1}. ")
+                    menuList[i].displayInfo()
+                    println()
+                }
+                println("0. 뒤로가기")
+                // 하위 메뉴 선택
+                val menuSelect = numberInRange(0, menuList.size)
+                if (menuSelect == 0) {
+                    break
+                }
+                val selectedMenu = menuList[menuSelect - 1]
+                print("\"")
+                selectedMenu.displayInfo()
+                println("\"")
+                println("위 메뉴를 장바구니에 추가하시겠습니까?")
+                println("1. 확인       2. 취소")
+                // 장바구니 추가 선택
+                val cartSelect = numberInRange(1, 2)
+                if (cartSelect == 1) {
+                    cart.add(selectedMenu)
+                    println("${selectedMenu.name} 장바구니에 추가되었습니다.")
+                    break
+                }
+            }
+        }
+    }
+}
+
+fun numberInRange(start: Int, end: Int): Int {
+    while (true) {
+        try {
+            val number = readln().toInt()
+            if (number < start || number > end) {
+                println("잘못된 번호를 입력했어요. 다시 입력해주세요.")
+            } else {
+                return number
+            }
+        } catch (e: Exception) {
+            println("숫자를 입력해주세요.")
+        }
+    }
+}
+
+fun getAllMenuList(): ArrayList<Menu> {
     val menu = ArrayList<Menu>()
 
     val toast = Menu("TOAST", "한 손에 담긴 든든한 한 끼, 한 입에 퍼지는 미소")
@@ -31,62 +93,5 @@ fun main() {
     drinkList.add(IcedChoco("Iced Choco", 3300, "깊은 달콤함이 가득한 아이스 초코"))
     menu.add(drinks)
 
-    while (true) {
-        println("\"ISAAC TOAST 에 오신걸 환영합니다.\"")
-        println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.")
-        while (true) {
-            println("[ ISAAC MENU ]")
-            for (i in menu.indices) {
-                print("${i + 1}. ")
-                menu[i].displayInfo()
-            }
-            var select: Int
-            while (true) {
-                try {
-                    select = readln().toInt()
-                    if (select < 1 || select > menu.size) {
-                        println("잘못된 번호를 입력했어요. 다시 입력해주세요.")
-                    } else {
-                        break
-                    }
-                } catch (e: Exception) {
-                    println("숫자를 입력해주세요.")
-                }
-            }
-            println("[ ${menu[select - 1].name} MENU ]")
-            val menuList = menu[select - 1].list
-            for (i in menuList.indices) {
-                print("${i + 1}. ")
-                menuList[i].displayInfo()
-                println()
-            }
-            println("0. 뒤로가기")
-            var order = false
-            var menuSelect: Int
-            while (true) {
-                try {
-                    menuSelect = readln().toInt()
-                    if (menuSelect > menuList.size) {
-                        println("잘못된 번호를 입력했어요. 다시 입력해주세요.")
-                    } else if (menuSelect == 0) {
-                        break
-                    } else {
-                        order = true
-                        break
-                    }
-                } catch (e: Exception) {
-                    println("숫자를 입력해주세요.")
-                }
-            }
-            if (!order) {
-                continue
-            }
-            print("\"")
-            menuList[menuSelect - 1].displayInfo()
-            println("\"")
-            println("위 메뉴를 장바구니에 추가하시겠습니까?")
-            println("1. 확인       2. 취소")
-            // 장바구니 기능 구현 예정
-        }
-    }
+    return menu
 }
