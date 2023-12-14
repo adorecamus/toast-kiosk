@@ -1,9 +1,11 @@
 package com.kiosk.menu
 
+import com.kiosk.item.Item
+
 open class Menu(name: String, description: String) {
     val name: String
     val description: String
-    val list = ArrayList<Menu>()
+    val items = ArrayList<Item>()
 
     init {
         this.name = name

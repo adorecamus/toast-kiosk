@@ -1,8 +1,8 @@
-package com.kiosk.menu.drink
+package com.kiosk.item
 
 import com.kiosk.menu.Menu
 
-open class Drink(name: String, price: Int, description: String) : Menu(name, description) {
+open class Item(name: String, price: Int, description: String) : Menu(name, description) {
     val price: Int
 
     init {
