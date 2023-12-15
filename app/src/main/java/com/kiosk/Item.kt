@@ -1,6 +1,4 @@
-package com.kiosk.item
-
-import com.kiosk.menu.Menu
+package com.kiosk
 
 open class Item(name: String, price: Int, description: String) : Menu(name, description) {
     val price: Int
