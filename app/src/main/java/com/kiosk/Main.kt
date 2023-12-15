@@ -18,12 +18,11 @@ suspend fun main() {
     var isCompleted = false
     while (!isCompleted) {
         println("\"ISAAC TOAST 에 오신걸 환영합니다.\"")
-        println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.")
+        println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.\n")
         var isHome = false
         while (!isHome) {
             // 메뉴 표시
             displayMenus()
-            println("0. 종료")
             // 메뉴 선택
             val selectedMenuNumber: Int = selectNumberInRange(0, menus.size)
             if (selectedMenuNumber == 0) {
@@ -55,14 +54,15 @@ suspend fun main() {
                     if (selectedNumber == 1) {
                         var now = LocalDateTime.now()
                         if (!now.isBefore(bankCheckStartTime) && !now.isAfter(bankCheckEndTime)) {
-                            println("${bankCheckStartTime.hour}시 ${bankCheckStartTime.minute}분 ~ ${bankCheckEndTime.hour}시 ${bankCheckEndTime.minute}분은 은행 점검 시간입니다. 이후에 결제를 시도해주세요.")
+                            println("${bankCheckStartTime.hour}시 ${bankCheckStartTime.minute}분 ~ ${bankCheckEndTime.hour}시 ${bankCheckEndTime.minute}분은 은행 점검 시간입니다. 이후에 결제를 시도해주세요.\n")
                             break
                         }
                         if (!account.withdraw((totalPrice).toLong())) {
                             val balance = account.getBalance()
                             println("현재 잔액은 ${balance}원으로 ${totalPrice - balance}원이 부족해 주문할 수 없습니다.\n")
                         } else {
-                            println("결제를 완료했습니다.")
+                            cart.clear()
+                            println("결제를 완료했습니다.\n")
                         }
                         isHome = true
                     }
@@ -70,7 +70,12 @@ suspend fun main() {
                 }
                 // 주문 취소 메뉴일 경우
                 else if (menuName == "CANCEL") {
+                    if (cart.size == 0) {
+                        println("장바구니에 담긴 내역이 없습니다.\n")
+                        break
+                    }
                     cart.clear()
+                    println("장바구니를 비웠습니다.\n")
                     isHome = true
                     break
                 }
@@ -115,7 +120,7 @@ suspend fun selectNumberInRange(start: Int, end: Int): Int {
                 println("잘못된 번호를 입력했어요. 다시 입력해주세요.")
             } else {
                 // 숫자 선택할 때마다 3초 지연
-                delay(3000)
+                delay(1000)
                 return number
             }
         } catch (e: Exception) {
@@ -155,8 +160,5 @@ fun displayMenus() {
         print("${i + 1}. ")
         menus[i].displayInfo()
     }
-}
-
-fun isAvailableTime() {
-//    return now.
+    println("\n0. 종료")
 }
