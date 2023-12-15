@@ -1,10 +1,15 @@
 package com.kiosk
 
 import kotlinx.coroutines.delay
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 val menus = ArrayList<Menu>()
 val cart = ArrayList<Item>()
 val account = Account()
+var today = LocalDate.now()
+val bankCheckStartTime = LocalDateTime.of(today.year, today.month, today.dayOfMonth, 12, 0, 0)
+val bankCheckEndTime = LocalDateTime.of(today.year, today.month, today.dayOfMonth, 12, 30, 0)
 
 suspend fun main() {
     getAllMenus()
@@ -48,6 +53,11 @@ suspend fun main() {
                     println("1. 주문       2. 메뉴판")
                     val selectedNumber = selectNumberInRange(1, 2)
                     if (selectedNumber == 1) {
+                        var now = LocalDateTime.now()
+                        if (!now.isBefore(bankCheckStartTime) && !now.isAfter(bankCheckEndTime)) {
+                            println("${bankCheckStartTime.hour}시 ${bankCheckStartTime.minute}분 ~ ${bankCheckEndTime.hour}시 ${bankCheckEndTime.minute}분은 은행 점검 시간입니다. 이후에 결제를 시도해주세요.")
+                            break
+                        }
                         if (!account.withdraw((totalPrice).toLong())) {
                             val balance = account.getBalance()
                             println("현재 잔액은 ${balance}원으로 ${totalPrice - balance}원이 부족해 주문할 수 없습니다.\n")
@@ -145,4 +155,8 @@ fun displayMenus() {
         print("${i + 1}. ")
         menus[i].displayInfo()
     }
+}
+
+fun isAvailableTime() {
+//    return now.
 }
