@@ -31,6 +31,10 @@ suspend fun main() {
             while (true) {
                 // 주문 메뉴일 경우
                 if (menuName == "ORDER") {
+                    if (cart.size == 0) {
+                        println("장바구니에 담긴 내역이 없습니다.\n")
+                        break
+                    }
                     var totalPrice: Int = 0
                     println("아래와 같이 주문하시겠습니까?\n")
                     println("[ ORDERS ]")
