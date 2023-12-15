@@ -10,15 +10,22 @@ suspend fun main() {
     getAllMenus()
     account.deposit((15000..25000).random().toLong())
 
-    while (true) {
+    var isCompleted = false
+    while (!isCompleted) {
         println("\"ISAAC TOAST 에 오신걸 환영합니다.\"")
         println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.")
         var isHome = false
         while (!isHome) {
             // 메뉴 표시
             displayMenus()
+            println("0. 종료")
             // 메뉴 선택
-            val selectedMenuNumber: Int = selectNumberInRange(1, menus.size)
+            val selectedMenuNumber: Int = selectNumberInRange(0, menus.size)
+            if (selectedMenuNumber == 0) {
+                println("키오스크를 종료합니다.")
+                isCompleted = true
+                break
+            }
             val selectedMenu = menus[selectedMenuNumber - 1]
             val menuName = selectedMenu!!.name
             while (true) {
